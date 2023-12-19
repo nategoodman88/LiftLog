@@ -4,6 +4,13 @@
       <q-input v-model="text" label="Name" />
       <q-input v-model="date" filled type="date" label="Date of Birth" />
       <q-select v-model="model" :options="options" label="Gender" />
+      <q-input
+        v-model="number"
+        type="number"
+        filled
+        label="Weight"
+        style="max-width: 200px"
+      />
     </div>
   </div>
   <div class="center">
@@ -22,6 +29,7 @@ export default {
       localStorage.setItem("name", this.text);
       localStorage.setItem("birthday", this.date);
       localStorage.setItem("gender", this.model);
+      localStorage.setItem("weight", this.number);
       this.$router.push("/profile");
     },
   },
@@ -31,6 +39,7 @@ export default {
       text: ref(""),
       date: ref(""),
       model: ref(""),
+      number: ref(""),
       options: ["Male", "Female", "Nonbinary"],
     };
   },

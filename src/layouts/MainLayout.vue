@@ -12,7 +12,7 @@
 
       <q-tabs align="left">
         <q-route-tab to="/" label="Home" />
-        <!--<q-route-tab to="/page2" label="Past Workouts" /> this is not implemented yet-->
+        <q-route-tab to="/workouts" label="Past Workouts" />
         <q-route-tab to="/profile" label="Profile" />
       </q-tabs>
     </q-header>
