@@ -1,20 +1,15 @@
 <template>
   <q-page class="flex flex-center">
-    <img
-      alt="Quasar logo"
-      src="~assets/quasar-logo-vertical.svg"
-      style="width: 200px; height: 200px"
-    />
+    <div class="center">
+      <q-btn
+        outline
+        rounded
+        color="black"
+        label="Begin logging"
+        @click="openLog()"
+      />
+    </div>
   </q-page>
-  <div class="center">
-    <q-btn
-      outline
-      rounded
-      color="black"
-      label="Begin logging"
-      @click="openLog()"
-    />
-  </div>
   <component :is="currentComponent" v-if="showWorkoutLog" @close="closeLog" />
 </template>
 
@@ -28,7 +23,7 @@ export default defineComponent({
     WorkoutLog,
   },
   data() {
-    //load page with false and null so workoutlog component is always hidden when navigating to home
+    //load page with false and null so workoutlog component is always hidden when navigating to
     return {
       showWorkoutLog: false,
       currentComponent: null,

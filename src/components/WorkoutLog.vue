@@ -1,33 +1,48 @@
 <template>
   <div class="popup-container">
-    <h1>Workout log for {{ currentDate }}</h1>
+    <header class="header">Workout log for {{ currentDate }}</header>
     <div class="q-pa-md">
-      <q-table
-        flat
-        bordered
-        grid
-        title="Exercises"
-        :rows="rows"
-        :columns="columns"
-        row-key="name"
-        :filter="filter"
-        hide-header
-      >
-        <template v-slot:top-right>
-          <q-input
-            borderless
-            dense
-            debounce="300"
-            v-model="filter"
-            placeholder="Search"
-          >
-            <template v-slot:append>
-              <q-icon name="search" />
-            </template>
-          </q-input>
-        </template>
-      </q-table>
+      <div class="parent">
+        <div class="child">Exercise</div>
+        <div class="child">Weight</div>
+        <div class="child">Sets</div>
+        <div class="child">Reps</div>
+      </div>
+
+      <div v-for="(exercise, index) in rows" :key="index">
+        <div class="exercise-item">
+          <div>{{ exercise.name }}</div>
+          <div>{{ exercise.weight }}</div>
+          <div>{{ exercise.sets }}</div>
+          <div>{{ exercise.reps }}</div>
+        </div>
+        <q-separator />
+      </div>
+      <q-btn
+        outline
+        rounded
+        color="black"
+        label="+"
+        @click="showModal = true"
+      />
     </div>
+
+    <!-- Add new excersie -->
+    <q-dialog v-model="showModal">
+      <q-card>
+        <q-card-section>
+          <q-input v-model="newExercise.name" label="Exercise" dense />
+          <q-input v-model="newExercise.weight" label="Weight (in lbs)" dense />
+          <q-input v-model="newExercise.sets" label="Sets" dense />
+          <q-input v-model="newExercise.reps" label="Reps" dense />
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn label="Save" color="primary" @click="saveExercise" />
+          <q-btn label="Cancel" color="negative" @click="showModal = false" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
     <q-btn
       outline
       rounded
@@ -37,62 +52,57 @@
     />
   </div>
 </template>
+
 <script>
 import { ref } from "vue";
+
 const currentDate = new Date().toDateString();
-//for use with bodyweight exercises such as pushups
 const userWeight = localStorage.getItem("weight");
-
-const columns = [
-  {
-    name: "Exercise",
-    required: true,
-    label: "Exercise",
-    align: "left",
-    field: (row) => row.name,
-    format: (val) => `${val}`,
-    sortable: true,
-  },
-  {
-    name: "weight",
-    align: "center",
-    label: "Weight (in lbs)",
-    field: "weight",
-    sortable: true,
-  },
-  { name: "sets", label: "Sets", field: "sets" },
-  { name: "reps", label: "Reps", field: "reps" },
-];
-
-//mock up use
-const rows = [
-  {
-    name: "Bench Press",
-    weight: 135,
-    sets: 3,
-    reps: 10,
-  },
-  {
-    name: "Pushups",
-    weight: userWeight,
-    sets: 5,
-    reps: 10,
-  },
-];
 
 export default {
   name: "LogWorkout",
   data() {
     return {
       currentDate,
-      filter: ref(""),
-      columns,
-      rows,
+      rows: [],
+      showModal: false,
+      newExercise: {
+        name: "",
+        weight: "",
+        sets: "",
+        reps: "",
+      },
     };
+  },
+  methods: {
+    addExercise(exercise) {
+      this.rows.push(exercise);
+    },
+    saveExercise() {
+      if (
+        this.newExercise.weight.toLowerCase() === "bw" ||
+        this.newExercise.weight.toUpperCase() === "BW"
+      ) {
+        this.newExercise.weight = userWeight;
+      }
+      this.addExercise({ ...this.newExercise });
+      this.showModal = false;
+      // Clear the input fields
+      this.newExercise = {
+        name: "",
+        weight: "",
+        sets: "",
+        reps: "",
+      };
+    },
   },
 };
 </script>
+
 <style scoped>
+.header {
+  font-size: large;
+}
 .popup-container {
   position: fixed;
   top: 50%;
@@ -102,5 +112,21 @@ export default {
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
+}
+.parent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.child {
+  flex: 1; /* Each child div takes equal space */
+  padding: 0 10px;
+}
+.exercise-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
 }
 </style>

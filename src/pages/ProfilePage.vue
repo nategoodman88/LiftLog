@@ -1,6 +1,11 @@
 <template>
-  <h1>Profile</h1>
+  <header class="header">Profile</header>
   <div class="q-mt-md">
+    <q-img
+      :src="localStorageProfilePicture"
+      spinner-color="white"
+      style="height: 140px; max-width: 150px"
+    />
     <p>Name: {{ localStorageName }}</p>
     <p>Date: {{ localStorageBirthday }}</p>
     <p>Gender: {{ localStorageGender }}</p>
@@ -24,6 +29,7 @@ export default {
     const date = ref("");
     const model = ref("");
     const number = ref("");
+    const profilePicture = ref("");
 
     //retrieve data from localStorage on component mount
     onMounted(() => {
@@ -31,6 +37,7 @@ export default {
       date.value = localStorage.getItem("birthday") || "";
       model.value = localStorage.getItem("gender") || "";
       number.value = localStorage.getItem("weight") || "";
+      profilePicture.value = localStorage.getItem("profilePicture") || "";
     });
 
     //export variables for use in the template
@@ -39,7 +46,13 @@ export default {
       localStorageBirthday: date,
       localStorageGender: model,
       localStorageWeight: number,
+      localStorageProfilePicture: profilePicture,
     };
   },
 };
 </script>
+<style>
+.header {
+  font-size: large;
+}
+</style>

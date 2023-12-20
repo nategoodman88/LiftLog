@@ -1,3 +1,8 @@
 <template>
-  <h1>Workout History</h1>
+  <header class="header">Workout History</header>
 </template>
+<style>
+.header {
+  font-size: large;
+}
+</style>
